@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{title}}</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.staticfile.org/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS -->
+    {% block css %}{% endblock %}
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="/static/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    {% block context %}{% endblock %}
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://cdn.staticfile.org/metisMenu/1.0.3/metisMenu.min.js"></script>
+
+    <!-- Page-Level Plugin Scripts -->
+    {% block js %}{% endblock %}
+
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="/static/js/sb-admin.js"></script>
+
+</body>
+
+</html>
