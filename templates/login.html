@@ -41,24 +41,25 @@
 // ajax 提交表单函数
 function ajaxLogin(){
     $.ajax({
-        data: $("#loginForm").serializeArray(),
-        type: "post",
-        dataType: "json",
+        data: $('#loginForm').serializeArray(),
+        type: 'post',
+        dataType: 'json',
         cache: false,
         beforeSend: function(xhr){
-            $("#loginErr").hide("fast");
+            $('#loginErr').hide('fast');
         },
         error: function(xhr, textStatus, errThr){
             alert(textStatus);
         },
         success: function(data, textStatus){
             if (data.err) {
-                $("#loginErr").text(data.err);
-                $("#loginErr").show("fast");
+                $('#loginErr').text(data.err);
+                $('#loginErr').show('fast');
             }
         },
     });
 
+    $('#loginForm')[0].reset()
     updateCaptcha(); //提交表单完成后更新验证码
     return false;
 }
@@ -66,22 +67,22 @@ function ajaxLogin(){
 // 更新验证码
 function updateCaptcha(){
     $.ajax({
-        url: "{{ APP.Url }}/captcha/request?t=" + new Date().getTime(),
-        dataType: "json",
+        url: '{{ APP.Url }}/captcha/request?t=' + new Date().getTime(),
+        dataType: 'json',
         cache: false,
         error: function(xhr, textStatus, errThr){
             alert(textStatus);
         },
         success: function(data, textStatus){
-            $("#captchaReq img:first").attr("src", "{{ APP.Url }}/captcha/"+ data.Id +".png");
-            $("#captchaReq input:first").val(data.Id);
+            $('#captchaReq img:first').attr('src', '{{ APP.Url }}/captcha/'+ data.Id +'.png');
+            $('#captchaReq input:first').val(data.Id);
         },
     });
 }
 
 //绑定事件
 $(document).ready(function() {
-    $("#captchaReq").click(function () {
+    $('#captchaReq').click(function () {
         updateCaptcha();
     });
 });
