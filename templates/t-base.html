@@ -5,8 +5,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ APP.Url }}/static/img/favicon.ico">
+    <link rel="apple-touch-icon" sizes="64x64" href="{{ APP.Url }}/static/img/logo.png">
 
-    <title>{{title}}</title>
+    <title>{{APP.Name}} - {{ Title }}</title>
 
     <!-- Core CSS - Include with every page -->
     <link href="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +18,7 @@
     {% block css %}{% endblock %}
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="/static/css/sb-admin.css" rel="stylesheet">
+    <link href="{{ APP.Url }}/static/css/sb-admin.css" rel="stylesheet">
 
 </head>
 
@@ -33,7 +35,7 @@
     {% block js %}{% endblock %}
 
     <!-- SB Admin Scripts - Include with every page -->
-    <script src="/static/js/sb-admin.js"></script>
+    <script src="{{ APP.Url }}/static/js/sb-admin.js"></script>
 
 </body>
 
