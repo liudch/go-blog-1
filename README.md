@@ -11,4 +11,5 @@ github.com/flosch/pongo2 v1.1
 
 github.com/mattn/go-sqlite3
 github.com/oal/beego-pongo2
+github.com/dchest/captcha
 ```
