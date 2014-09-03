@@ -21,7 +21,9 @@ var (
 )
 
 func init() {
-	if strings.ToLower(beego.RunMode) == "dev" { //初始化日志级别
+	//初始化日志引擎参数
+	beego.SetLogger("file", `{"filename":"log/main.log"}`)
+	if strings.ToLower(beego.RunMode) == "dev" {
 		beego.SetLevel(beego.LevelDebug)
 	} else {
 		beego.SetLevel(beego.LevelNotice)
