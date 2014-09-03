@@ -4,8 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
-	_ "go-blog/models/db"
+	"go-blog/models"
+	"go-blog/models/db"
 	_ "go-blog/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -17,9 +20,16 @@ var (
 	run    = flag.Bool("run", false, "\t\t运行系统")
 )
 
+func init() {
+	if strings.ToLower(beego.RunMode) == "dev" { //初始化日志级别
+		beego.SetLevel(beego.LevelDebug)
+	} else {
+		beego.SetLevel(beego.LevelNotice)
+	}
+}
+
 func main() {
-	flag.Parse()
-	if flag.NFlag() == 0 { //没有使用参数就打印帮助
+	if flag.Parse(); flag.NFlag() == 0 { //没有使用参数就打印帮助
 		fmt.Println("命令行参数及默认值：")
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -27,14 +37,36 @@ func main() {
 
 	switch {
 	case *syncdb: //同步数据库结构
-		err := orm.RunSyncdb("default", *force, true)
-		if err != nil {
-			fmt.Println(err)
+		verbose := strings.ToLower(beego.RunMode) == "dev"
+		if err := orm.RunSyncdb("default", *force, verbose); err != nil {
+			beego.Critical(err)
 			os.Exit(1)
 		}
+		newAdminUser()
 	case *run: //运行
 		beego.Run()
 	}
 
-	os.Exit(0)
+	time.Sleep(time.Second)
+}
+
+// 添加默认的管理员账号
+func newAdminUser() {
+	u := &db.User{
+		Id:       1,
+		Nickname: "Admin",
+		Email:    "root@root.local",
+		Password: models.Md5("123456"),
+		Admin:    true,
+	}
+
+	o := orm.NewOrm()
+	if created, _, err := o.ReadOrCreate(u, "Id"); err != nil {
+		beego.Critical(err)
+		os.Exit(1)
+	} else {
+		if created {
+			beego.Notice(`新安装，缺省用户："root@root.local" / "123456"`)
+		}
+	}
 }

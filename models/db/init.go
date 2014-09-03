@@ -33,6 +33,6 @@ func init() {
 	orm.SetMaxOpenConns("default", 100)
 	orm.DefaultTimeLoc = time.UTC
 
-	// beego 的运行在开发模式下，打开 orm 的 DEBUG 选项
-	orm.Debug = beego.RunMode == "dev"
+	// beego 运行在开发模式下，打开 orm 的 DEBUG 选项
+	orm.Debug = strings.ToLower(beego.RunMode) == "dev"
 }
