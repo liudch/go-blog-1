@@ -57,8 +57,9 @@ function ajaxLogin(){
                 $('#loginErr').text(data.err);
                 $('#loginErr').show('fast');
                 updateCaptcha(); //更新验证码
+            } else{
+                location.href = '{{ APP.Url }}'; //登陆成功跳转到首页    
             }
-            location.href = '{{ APP.Url }}'; //登陆成功跳转到首页
         },
         complete: function(xhr, ts){
             $('#loginForm')[0].reset() //调用 dom 的 reset 方法
