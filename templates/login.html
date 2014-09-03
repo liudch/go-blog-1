@@ -26,7 +26,7 @@
                                 <input style="width:160px;" class="form-control" placeholder="Captcha" name="captchaVal" type="number" min=1 required>
                             </div>
                             <div id="loginErr" class="alert alert-danger" role="alert" style="display:none"></div>
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">登 陆</button>
+                            <button id="loginBtn" type="submit" class="btn btn-primary btn-lg btn-block">登 陆</button>
                         </fieldset>
                     </form>
                 </div>
@@ -46,6 +46,7 @@ function ajaxLogin(){
         dataType: 'json',
         cache: false,
         beforeSend: function(xhr){
+            $('#loginBtn').attr("disabled", "disabled");
             $('#loginErr').hide('fast');
         },
         error: function(xhr, textStatus, errThr){
@@ -55,13 +56,17 @@ function ajaxLogin(){
             if (data.err) {
                 $('#loginErr').text(data.err);
                 $('#loginErr').show('fast');
+                updateCaptcha(); //更新验证码
             }
+            location.href = '{{ APP.Url }}'; //登陆成功跳转到首页
+        },
+        complete: function(xhr, ts){
+            $('#loginForm')[0].reset() //调用 dom 的 reset 方法
+            $('#loginBtn').removeAttr("disabled");
         },
     });
 
-    $('#loginForm')[0].reset() //调用 dom 的 reset 方法
-    updateCaptcha(); //提交表单完成后更新验证码
-    return false;
+    return false
 }
 
 // 更新验证码
