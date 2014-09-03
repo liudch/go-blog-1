@@ -1,6 +1,6 @@
 {% extends "t-base.html" %}
 
-{% block context %}
+{% block body %}
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
@@ -12,10 +12,10 @@
                     <form id="loginForm"  role="form" method="post" onsubmit="return ajaxLogin()">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                <input class="form-control" placeholder="E-mail" name="email" type="email" required autofocus>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                <input class="form-control" placeholder="Password" name="password" type="password" required>
                             </div>
                             <div class="form-group has-warning">
                                 <a href="javascript:void(0)" id="captchaReq">
@@ -23,7 +23,7 @@
                                     <i class="fa fa-refresh"></i>
                                     <input type="hidden" name="captchaId" value="{{ Captcha.Id }}">
                                 </a>
-                                <input style="width:160px;" class="form-control" placeholder="Captcha" name="captchaVal" type="number" min=1>
+                                <input style="width:160px;" class="form-control" placeholder="Captcha" name="captchaVal" type="number" min=1 required>
                             </div>
                             <div id="loginErr" class="alert alert-danger" role="alert" style="display:none"></div>
                             <button type="submit" class="btn btn-primary btn-lg btn-block">登 陆</button>
@@ -59,7 +59,7 @@ function ajaxLogin(){
         },
     });
 
-    $('#loginForm')[0].reset()
+    $('#loginForm')[0].reset() //调用 dom 的 reset 方法
     updateCaptcha(); //提交表单完成后更新验证码
     return false;
 }
