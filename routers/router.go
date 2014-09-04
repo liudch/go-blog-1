@@ -9,6 +9,7 @@ import (
 
 func init() {
 	beego.Router("/login", &controllers.LoginController{})
+	beego.Router("/logout", &controllers.LogoutController{})
 	beego.Router("/", &controllers.IndexController{})
 
 	// 验证码服务

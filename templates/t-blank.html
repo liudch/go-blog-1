@@ -46,9 +46,13 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> 用户设置</a></li>
+                    {% if APP.HasLogin %}
+                        <li><a href="{{ APP.Url }}/user"><i class="fa fa-user fa-fw"></i> 用户设置</a></li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
+                        <li><a href="{{ APP.Url }}/logout"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
+                    {% else %}
+                        <li><a href="{{ APP.Url }}/login"><i class="fa fa-sign-in fa-fw"></i> 登陆</a></li>
+                    {% endif %}
                     </ul><!-- /.dropdown-user -->
                 </li><!-- /.dropdown -->
 
