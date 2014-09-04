@@ -28,6 +28,10 @@ func init() {
 	} else {
 		beego.SetLevel(beego.LevelNotice)
 	}
+
+	//初始化 beego 参数
+	beego.SessionOn = true
+	beego.SessionName = "go-blog-sessID"
 }
 
 func main() {
@@ -54,21 +58,21 @@ func main() {
 
 // 添加默认的管理员账号
 func newAdminUser() {
-	u := &db.User{
+	ac := &db.Accounts{
 		Id:       1,
 		Nickname: "Admin",
 		Email:    "root@root.local",
-		Password: models.Md5("123456"),
+		Password: models.Md5("12345678"),
 		Admin:    true,
 	}
 
 	o := orm.NewOrm()
-	if created, _, err := o.ReadOrCreate(u, "Id"); err != nil {
+	if created, _, err := o.ReadOrCreate(ac, "Id"); err != nil {
 		beego.Critical(err)
 		os.Exit(1)
 	} else {
 		if created {
-			beego.Notice(`新安装，缺省用户："root@root.local" / "123456"`)
+			beego.Notice(`新安装，缺省用户："root@root.local" / "12345678"`)
 		}
 	}
 }

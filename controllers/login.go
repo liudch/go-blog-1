@@ -1,6 +1,10 @@
 package controllers
 
 import (
+	"go-blog/models/forms"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/validation"
 	"github.com/dchest/captcha"
 	"github.com/oal/beego-pongo2"
 )
@@ -20,12 +24,32 @@ func (this *LoginController) Get() {
 }
 
 func (this *LoginController) Post() {
-	result := make(map[string]string)
-
-	if !captcha.VerifyString(this.GetString("captchaId"), this.GetString("captchaVal")) {
-		result["err"] = "验证码错误"
+	form := &forms.LoginForm{} //直接把表单解析到 struct
+	if err := this.ParseForm(form); err != nil {
+		beego.Error(err)
+		return
 	}
 
-	this.Data["json"] = result
+	//验证表单
+	valid := validation.Validation{}
+	b, err := valid.Valid(&forms.LoginFormValid{
+		Email:      form.Email,
+		Password:   form.Password,
+		CaptchaId:  form.CaptchaId,
+		CaptchaVal: form.CaptchaVal,
+	})
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+
+	if !b {
+		errMsg := valid.Errors[0].Field + ": " + valid.Errors[0].Message // 只回显第一个错误
+		this.Data["json"] = map[string]string{"err": errMsg}
+	} else {
+		this.SetSession("Email", form.Email)
+		this.Data["json"] = map[string]string{"ok": "true"}
+	}
+
 	this.ServeJson()
 }

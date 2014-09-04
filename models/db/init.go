@@ -13,9 +13,10 @@ import (
 )
 
 func init() {
-	orm.RegisterModel(new(User))
+	//注册数据模型
+	orm.RegisterModel(new(Accounts))
 
-	// 注册数据库
+	// 注册数据库驱动
 	switch DBDriver := beego.AppConfig.String("DBDriver"); {
 	case strings.Contains(DBDriver, "postgres"):
 		orm.RegisterDriver("postgres", orm.DR_MySQL)
@@ -29,7 +30,7 @@ func init() {
 	}
 
 	// 设置 ORM 参数
-	orm.SetMaxIdleConns("default", 10)
+	orm.SetMaxIdleConns("default", 30)
 	orm.SetMaxOpenConns("default", 100)
 	orm.DefaultTimeLoc = time.UTC
 
