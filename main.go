@@ -7,11 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+
 	"go-blog/models"
 	"go-blog/models/db"
 	_ "go-blog/routers"
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 )
 
 var (
@@ -20,6 +21,7 @@ var (
 	run    = flag.Bool("run", false, "\t\t运行系统")
 )
 
+//初始化 beego 参数
 func init() {
 	//初始化日志引擎参数
 	beego.SetLogger("file", `{"filename":"log/main.log"}`)
@@ -29,7 +31,6 @@ func init() {
 		beego.SetLevel(beego.LevelNotice)
 	}
 
-	//初始化 beego 参数
 	beego.SessionOn = true
 	beego.SessionName = "go-blog-sessID"
 }

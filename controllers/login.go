@@ -14,12 +14,10 @@ type LoginController struct {
 }
 
 func (this *LoginController) Get() {
-	Captcha := struct{ Id string }{captcha.NewLen(6)} //验证码长度为6
-
 	pongo2.Render(this.Ctx, "login.html", pongo2.Context{
 		"APP":     this.Data,
 		"Title":   "请登陆！",
-		"Captcha": &Captcha,
+		"Captcha": &struct{ Id string }{captcha.NewLen(6)}, //验证码长度为6
 	})
 }
 
@@ -47,7 +45,7 @@ func (this *LoginController) Post() {
 		errMsg := valid.Errors[0].Field + ": " + valid.Errors[0].Message // 只回显第一个错误
 		this.Data["json"] = map[string]string{"err": errMsg}
 	} else {
-		this.SetSession("Email", form.Email)
+		this.SetSession("Email", form.Email) //设置Session
 		this.Data["json"] = map[string]string{"ok": "true"}
 	}
 
