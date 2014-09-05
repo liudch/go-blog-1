@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -24,13 +25,22 @@ var (
 //初始化 beego 参数
 func init() {
 	//初始化日志引擎参数
-	beego.SetLogger("file", `{"filename":"log/main.log"}`)
+	models.IsFolder(beego.AppConfig.String("LogFolder"), true) //尝试创建目录
+	logPth := filepath.Join(beego.AppConfig.String("LogFolder"), "go-blog.log")
+	logPth = strings.Replace(logPth, `\`, `/`, -1)
+
+	beego.SetLogger(
+		"file",
+		fmt.Sprintf(`{"filename":"%s","maxdays":30}`, logPth),
+	)
+
 	if strings.ToLower(beego.RunMode) == "dev" {
 		beego.SetLevel(beego.LevelDebug)
 	} else {
 		beego.SetLevel(beego.LevelNotice)
 	}
 
+	// 会话设置
 	beego.SessionOn = true
 	beego.SessionName = "go-blog-sessID"
 }
