@@ -47,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                     {% if APP.HasLogin %}
-                        <li><a href="{{ APP.Url }}/account"><i class="fa fa-user fa-fw"></i> 用户设置</a></li>
+                        <li><a href="{{ APP.Url }}/user-profile"><i class="fa fa-user fa-fw"></i> 用户配置</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ APP.Url }}/logout"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
                     {% else %}
@@ -75,7 +75,7 @@
                         <li>
                             <a href="#"><i class="fa fa-gear fa-fw"></i> 管理<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{{ APP.Url }}/account"><i class="fa fa-user fa-fw"></i> 用户设置</a></li>
+                                <li><a href="{{ APP.Url }}/user-profile"><i class="fa fa-user fa-fw"></i> 用户配置</a></li>
                             </ul>
                         </li>
                         {% endif %}

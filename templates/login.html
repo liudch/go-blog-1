@@ -9,7 +9,7 @@
                     <h3 class="panel-title">请登录 {{ APP.Name }}！</h3>
                 </div>
                 <div class="panel-body">
-                    <form id="loginForm"  role="form" method="post" onsubmit="return ajaxLogin()">
+                    <form id="loginForm" role="form" method="post" onsubmit="return ajaxLogin()">
                         <fieldset>
                             <div class="form-group">
                                 <input class="form-control" placeholder="E-mail" name="email" type="email" required autofocus>
@@ -25,8 +25,8 @@
                                 </a>
                                 <input style="width:160px;" class="form-control" placeholder="Captcha" name="captchaVal" type="number" min=1 required>
                             </div>
-                            <div id="loginErr" class="alert alert-danger" role="alert" style="display:none"></div>
-                            <button id="loginBtn" type="submit" class="btn btn-primary btn-lg btn-block">登 陆</button>
+                            <div id="formErrMsg" class="alert alert-danger" role="alert" style="display:none"></div>
+                            <button id="submit" type="submit" class="btn btn-primary btn-lg btn-block">登 陆</button>
                         </fieldset>
                     </form>
                 </div>
@@ -46,16 +46,16 @@ function ajaxLogin(){
         dataType: 'json',
         cache: false,
         beforeSend: function(xhr){
-            $('#loginBtn').attr("disabled", "disabled");
-            $('#loginErr').hide('fast');
+            $('#submit').attr("disabled", "disabled");
+            $('#formErrMsg').hide('fast');
         },
         error: function(xhr, textStatus, errThr){
             alert(textStatus);
         },
         success: function(data, textStatus){
             if (data.err) {
-                $('#loginErr').text(data.err);
-                $('#loginErr').show('fast');
+                $('#formErrMsg').text(data.err);
+                $('#formErrMsg').show('fast');
                 updateCaptcha(); //更新验证码
             } else{
                 location.href = '{{ APP.Url }}'; //登陆成功跳转到首页    
@@ -63,7 +63,7 @@ function ajaxLogin(){
         },
         complete: function(xhr, ts){
             $('#loginForm')[0].reset() //调用 dom 的 reset 方法
-            $('#loginBtn').removeAttr("disabled");
+            $('#submit').removeAttr("disabled");
         },
     });
 

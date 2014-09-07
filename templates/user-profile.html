@@ -1,0 +1,109 @@
+{% extends "t-blank.html" %}
+
+{% block context %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{{ Title }}</h1>
+        </div>
+    </div>
+
+    <form id="userProfileForm" role="form" method="post" onsubmit="return ajaxUserProfile()">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">用户认证*</div>
+                    <div class="panel-body">
+                        <div class="form-group has-warning">
+                            <div class="col-sm-6"><input type="email" class="form-control" placeholder="Email" name="email" required autofocus></div>
+                            <div class="col-sm-6"><input type="password" class="form-control" placeholder="Password" name="password" required></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">修改认证信息</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label" for="newEmail">新用户名</label>
+                            <input type="text" class="form-control" id="newEmail" name="newEmail"  placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="newPassword">新密码</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword"  placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="cfmNewPassword">新密码确认</label>
+                            <input type="password" class="form-control" id="cfmNewPassword" name="cfmNewPassword"  placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">修改用户信息</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label" for="nickname">别名</label>
+                            <input class="form-control" id="nickname" value="{{ Account.Nickname }}" name="nickname">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="motto">座右铭</label>
+                            <textarea class="form-control" rows="3" id="motto" name="motto">{{ Account.Motto }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div id="formErrMsg" class="alert alert-danger" role="alert" style="display:none"></div>
+                <button id="submit" type="submit" class="btn btn-primary btn-lg">提 交</button>
+                <button type="reset" class="btn btn-default btn-lg">复 位</button>
+            </div>
+        </div><!-- /.row -->
+    </form>
+</div><!-- /#page-wrapper -->
+{% endblock %}
+
+{% block js %}
+<script>
+// ajax 提交表单函数
+function ajaxUserProfile(){
+    $.ajax({
+        data: $('#userProfileForm').serializeArray(),
+        type: 'post',
+        dataType: 'json',
+        cache: false,
+        beforeSend: function(xhr){
+            $('#submit').attr("disabled", "disabled");
+            $('#formErrMsg').hide('fast');
+        },
+        error: function(xhr, textStatus, errThr){
+            alert(textStatus);
+        },
+        success: function(data, textStatus){
+            if (data.err) {
+                $('#formErrMsg').text(data.err);
+            } else{
+                $('#formErrMsg').text("成功");
+            }
+            $('#formErrMsg').show('fast');
+        },
+        complete: function(xhr, ts){
+            $('#submit').removeAttr("disabled");
+        },
+    });
+    
+    return false
+}
+</script>
+{% endblock %}
