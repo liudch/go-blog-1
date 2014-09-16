@@ -14,3 +14,11 @@ type Accounts struct {
 	GenTime  time.Time `orm:"auto_now_add;type(datetime)"`
 	MdfTime  time.Time `orm:"auto_now;type(datetime)"`
 }
+
+type Bookmarks struct {
+	Id      int       `orm:"pk;auto"`
+	Name    string    `orm:"unique;size(64)"`
+	Count   uint      `orm:"null"`
+	Special bool      `orm:"null"`
+	MdfTime time.Time `orm:"auto_now;type(datetime)"`
+}

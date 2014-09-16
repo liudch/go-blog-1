@@ -14,7 +14,7 @@ import (
 
 func init() {
 	//注册数据模型
-	orm.RegisterModel(new(Accounts))
+	orm.RegisterModel(new(Accounts), new(Bookmarks))
 
 	// 注册数据库驱动
 	switch DBDriver := beego.AppConfig.String("DBDriver"); {
