@@ -12,6 +12,7 @@ func init() {
 	beego.Router("/logout", &controllers.LogoutController{})
 	beego.Router("/", &controllers.IndexController{})
 	beego.Router("/user-profile", &controllers.AccountController{})
+	beego.Router("/bookmark", &controllers.BookmarkController{})
 
 	// 验证码服务
 	beego.Router("/captcha/request", &controllers.CaptchaController{})
