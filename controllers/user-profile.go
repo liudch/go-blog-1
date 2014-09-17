@@ -11,18 +11,12 @@ import (
 )
 
 type AccountController struct {
-	BaseController
+	AuthController
 }
 
 func (this *AccountController) Get() {
-	email := this.GetSession("Email")
-	//if email == nil {
-	//	this.Redirect(beego.UrlFor("IndexController.GET"), 302)
-	//}
-	email = "root@root.local"
-
 	o := orm.NewOrm()
-	ac := &db.Accounts{Email: email.(string)}
+	ac := &db.Accounts{Email: this.GetSession("Email").(string)}
 
 	if err := o.Read(ac, "Email"); err != nil {
 		beego.Error(err)
