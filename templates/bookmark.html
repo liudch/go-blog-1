@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-condensed table-striped table-hover">
                     <thead>
                         <tr>
                             <th>名称</th>
@@ -26,38 +26,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                    {% for b in Bookmarks %}
                         <tr>
-                            <td>Golang 实例实例实例实例实例</td>
-                            <td>215</td>
-                            <td>2001-02-20 01:20:52</td>
-                            <td><input class="bootstrap-switch" type="checkbox" name="2"></td>
-                            <td><button type="button" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button></td>
-                            <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
+                            <td>{{ b.Name }}</td>
+                            <td>{{ b.Count }}</td>
+                            <td>{{ b.MdfTime|date:"2006-01-02" }}</td>
+                            <td><input type="checkbox" name="special" value="{{ b.Id }}" {% if b.Special %}checked="checked"{% endif %}></td>
+                            <td><button type="button" class="btn btn-info btn-sm" onclick="editBookmark({{b.Id}},'{{b.Name}}')"><i class="fa fa-edit"></i></button></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="ajaxDelBookmark({{ b.Id }})"><i class="fa fa-times"></i></button></td>
                         </tr>
-                        <tr>
-                            <td>Golang 实例</td>
-                            <td>20</td>
-                            <td>2001-02-20</td>
-                            <td><input class="bootstrap-switch" type="checkbox" name="2"></td>
-                            <td><button type="button" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button></td>
-                            <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td>Golang 实例</td>
-                            <td>20</td>
-                            <td>2001-02-20</td>
-                            <td><input class="bootstrap-switch" type="checkbox" name="2"></td>
-                            <td><button type="button" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button></td>
-                            <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td>Golang 实例</td>
-                            <td>20</td>
-                            <td>2001-02-20</td>
-                            <td><input class="bootstrap-switch" type="checkbox" name="2"></td>
-                            <td><button type="button" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button></td>
-                            <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -65,15 +43,12 @@
     </div><!-- /.row -->
     <div class="row">
         <div class="col-lg-12 text-right">
-            <form class="form-inline" role="form" method="post">
+            <form id="bookmarkForm" class="form-inline" role="form" method="post" onsubmit="return ajaxBookmark()">
                 <div class="form-group">
-                    <input type="text" class="form-control" maxlength="32" name="name" placeholder="Name">
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" name="special"> 专辑</label>
+                    <input type="text" class="form-control" maxlength="32" name="name" placeholder="Name" required>
                 </div>
                 <input type="hidden" name="id" value="0">
-                <button type="submit" class="btn btn-default">添加</button>
+                <input type="submit" class="btn btn-default" value="添加">
             </form>
         </div>
     <div>
@@ -82,7 +57,74 @@
 
 {% block js %}
 <script src="http://cdn.staticfile.org/bootstrap-switch/3.0.0rc/js/bootstrap-switch.min.js"></script>
+
 <script>
-$(".bootstrap-switch").bootstrapSwitch();
+function ajaxBookmark(){ // 添加和修改书签
+    var submit = $('#bookmarkForm [type="submit"]');
+
+    $.ajax({
+        data: $('#bookmarkForm').serializeArray(),
+        type: 'post',
+        dataType: 'json',
+        cache: false,
+        beforeSend: function(xhr){
+            submit.attr("disabled", "disabled");
+        },
+        error: function(xhr, textStatus, errThr){
+            alert(textStatus);
+        },
+        success: function(data, textStatus){
+            if (data.err) {
+                alert(data.err);
+            } else{
+                 location.reload();  //提交成功后，重新加载页面
+            }
+        },
+        complete: function(xhr, ts){
+            $('#bookmarkForm [name="id"]').val(0);
+            submit.removeAttr("disabled");
+
+            submit.val("添加")
+            $('#bookmarkForm')[0].reset() //调用 dom 的 reset 方法
+
+        },
+    });
+
+    return false
+}
+
+function ajaxDelBookmark(id){ // 删除书签
+    $.ajax({
+        url: '{{ APP.Url }}/bookmark/del?id=' + id,
+        error: function(xhr, textStatus, errThr){
+            alert(textStatus);
+        },
+        success: function(data, textStatus){
+            location.reload();
+        },
+    });
+
+    return false
+}
+
+function editBookmark(id, name, special){ // 编辑书签（不是提交表单）
+    $('#bookmarkForm [name="id"]').val(id);
+    $('#bookmarkForm [name="name"]').val(name);
+    $('#bookmarkForm [type="submit"]').val("修改");
+}
+
+$(function(){
+    $('input[name="special"]').bootstrapSwitch();  // bootstrap-switch 初始化
+
+    $('input[name="special"]').on('switchChange.bootstrapSwitch', function(event, state) {
+        $.ajax({
+            url: '{{ APP.Url }}/bookmark/switch?id=' + this.value + "&special=" + state.value,
+            error: function(xhr, textStatus, errThr){
+                alert(textStatus);
+                location.reload();
+            },
+        });
+    });
+});
 </script>
 {% endblock %}

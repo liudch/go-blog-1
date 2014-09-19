@@ -13,6 +13,8 @@ func init() {
 	beego.Router("/", &controllers.IndexController{})
 	beego.Router("/user-profile", &controllers.AccountController{})
 	beego.Router("/bookmark", &controllers.BookmarkController{})
+	beego.Router("/bookmark/del", &controllers.BookmarkController{}, "get:DelBookmark")
+	beego.Router("/bookmark/switch", &controllers.BookmarkController{}, "get:Switch")
 
 	// 验证码服务
 	beego.Router("/captcha/request", &controllers.CaptchaController{})

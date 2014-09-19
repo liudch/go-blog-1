@@ -58,7 +58,7 @@ function ajaxLogin(){
                 $('#formErrMsg').show('fast');
                 updateCaptcha(); //更新验证码
             } else{
-                location.href = '{{ APP.Url }}'; //登陆成功跳转到首页    
+                location.href = '{{ APP.Url }}'; //登陆成功跳转到首页
             }
         },
         complete: function(xhr, ts){
